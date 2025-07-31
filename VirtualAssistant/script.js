@@ -130,9 +130,25 @@ function wishMe() {
     }
 }
 
-window.addEventListener('load', () => {
+/*window.addEventListener('load', () => {
     wishMe();
-});
+});*/
+
+// Trigger only once on first user click
+const handleFirstInteraction = () => {
+    // Ensure voices are loaded
+    if (speechSynthesis.getVoices().length === 0) {
+        speechSynthesis.onvoiceschanged = wishMe;
+    } else {
+        wishMe();
+    }
+
+    // Remove the listener after first call
+    document.removeEventListener('click', handleFirstInteraction);
+};
+
+// Listen for any click on the document
+document.addEventListener('click', handleFirstInteraction);
 
 let speechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 let recognition = new speechRecognition();
@@ -164,59 +180,69 @@ function takeCommand(message) {
         (message.includes("arina") || message.includes("arena"))
     ) {
         speak("Hello, how can I help you?");
+        voice.style.display = "none";
         return;
     }
 
     if (message.includes("who are you") || message.includes("your name")) {
         speak("I am Arina, your virtual assistant created by Ar-chah-na.");
+        voice.style.display = "none";
         return;
     }
 
     if (message.includes("open youtube")) {
         speak("Opening YouTube...");
         window.open("https://www.youtube.com/", "_blank");
+        voice.style.display = "none";
         return;
     }
 
     if (message.includes("open google")) {
         speak("Opening Google...");
         window.open("https://www.google.com/", "_blank");
+        voice.style.display = "none";
         return;
     }
 
     if (message.includes("open facebook")) {
         speak("Opening Facebook...");
         window.open("https://www.facebook.com/", "_blank");
+        voice.style.display = "none";
         return;
     }
 
     if (message.includes("open instagram")) {
         speak("Opening Instagram...");
         window.open("https://www.instagram.com/", "_blank");
+        voice.style.display = "none";
         return;
     }
 
     if (message.includes("open github")) {
         speak("Opening GittHub...");
         window.open("https://github.com/", "_blank");
+        voice.style.display = "none";
         return;
     }
 
     if (message.includes("open linkedin")) {
         speak("Opening LinkedIn...");
         window.open("https://www.linkedin.com/", "_blank");
+        voice.style.display = "none";
         return;
     }
 
     if (message.includes("open whatsapp")) {
         speak("Opening WhatsApp...");
         window.open("https://web.whatsapp.com/", "_blank");
+        voice.style.display = "none";
         return;
     }
 
     if (message.includes("open gmail")) {
         speak("Opening Gmail...");
         window.open("https://mail.google.com/", "_blank");
+        voice.style.display = "none";
         return;
     }
 
@@ -224,18 +250,21 @@ function takeCommand(message) {
         speak("Opening calculator...");
         //window.open("https://www.google.com/search?q=calculator", "_blank");
         window.open("calculator://")
+        voice.style.display = "none";
         return;
     }
 
     if (message.includes("time")) {
         let time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         speak("The current time is " + time);
+        voice.style.display = "none";
         return;
     }
 
     if (message.includes("date")) {
         let date = new Date().toLocaleDateString([], { day: 'numeric', month: 'long' });
         speak("Today's date is " + date);
+        voice.style.display = "none";
         return;
     }
 
@@ -243,5 +272,6 @@ function takeCommand(message) {
     let query = message.replace(/arina|arena/gi, "").trim();
     let finalText = "This is what I found on the internet regarding " + query;
     speak(finalText);
+    voice.style.display = "none";
     window.open(`https://www.google.com/search?q=${query}`, "_blank");
 }
